@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>Sample title</title>
+    {% endif %}
+</head>
+<body>
+    <h1>Github Search</h1>
+    <form method="POST">
+        {% if searchform %}
+        {{ searchform.csrf_token }}
+        <div>
+            {{ searchform.login(placeholder="Enter GitHub login") }}
+            <input type="submit" name='submit_button' value='Submit'>
+        </div>
+        {% endif %}
+    </form>
+    {% if user_info and repos_names_urls %}
+        <div>
+            <a href="{{ user_info['html_url'] }}">{{ user_info['name'] }}</a>
+        </div>
+        <div>
+            <img src="{{ user_info['avatar'] }}" width="169" height="169">
+        </div>
+        <div>
+            {% for key in repos_names_urls %}
+                <div>
+                    <a href="{{ repos_names_urls[key] }}" class="repo-style">{{ key }}</a>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+</body>
+</html>
