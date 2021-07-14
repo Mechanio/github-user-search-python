@@ -3,7 +3,6 @@ from forms import SearchForm
 import json
 import requests
 import graphene
-import extraction
 
 main = Blueprint('main', __name__)
 
@@ -11,8 +10,9 @@ main = Blueprint('main', __name__)
 class UserInfoQuery(graphene.ObjectType):
     url = graphene.String()
     name = graphene.String()
-    avatar_url = graphene.String()
-    html_url = graphene.String()
+    avatarUrl = graphene.String()
+    htmlUrl = graphene.String()
+    reposUrl = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -23,8 +23,9 @@ class Query(graphene.ObjectType):
         user_data = json.loads(response.text)
         return UserInfoQuery(url=url,
                              name=user_data['name'],
-                             avatar_url=user_data['avatar_url'],
-                             html_url=user_data['html_url'])
+                             avatarUrl=user_data['avatar_url'],
+                             htmlUrl=user_data['html_url'],
+                             reposUrl=user_data['repos_url'])
 
 
 schema = graphene.Schema(query=Query)
@@ -36,20 +37,25 @@ def home():
     if request.method == 'POST':
         if request.form['submit_button'] == 'Submit':
             login = searchform.login.data
-            query = '{ name }'
-            result = schema.execute(query)
-            print(result)
-            response = requests.get(f'https://api.github.com/users/{login}')
-            user_data = json.loads(response.text)
-            response = requests.get(user_data['repos_url'])
+            query_user_info = '''{
+                                   userInfo(url: "https://api.github.com/users/%s") {
+                                    name
+                                    url
+                                    avatarUrl
+                                    htmlUrl
+                                    reposUrl
+                                  }
+                                }''' % login
+            user_data = schema.execute(query_user_info)
+            user_data = user_data.data
+            print(user_data)
+            response = requests.get(user_data['userInfo']['reposUrl'])
             user_repos = json.loads(response.text)
-            user_info = {'name': user_data['name'], 'avatar': user_data['avatar_url'],
-                         'html_url': user_data['html_url']}
             repos_names_urls = {}
             for repo in user_repos:
                 repos_names_urls[repo['name']] = repo['html_url']
             return render_template('home.html', title='GitHub Search',
                                    searchform=searchform, repos_names_urls=repos_names_urls,
-                                   user_info=user_info)
+                                   user_info=user_data)
     return render_template('home.html', title='GitHub Search',
                            searchform=searchform)
