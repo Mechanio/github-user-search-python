@@ -20,7 +20,7 @@
         </div>
         {% endif %}
     </form>
-    {% if user_info and repos_names_urls %}
+    {% if user_info %}
         <div>
             <a href="{{ user_info['userInfo']['htmlUrl'] }}">{{ user_info['userInfo']['name'] }}</a>
         </div>
@@ -28,9 +28,9 @@
             <img src="{{ user_info['userInfo']['avatarUrl'] }}" width="169" height="169">
         </div>
         <div>
-            {% for key in repos_names_urls %}
+            {% for element in user_info['userRepos'] %}
                 <div>
-                    <a href="{{ repos_names_urls[key] }}" class="repo-style">{{ key }}</a>
+                    <a href="{{ element['repoHtmlUrl'] }}" class="repo-style">{{ element['repoName'] }}</a>
                 </div>
             {% endfor %}
         </div>
