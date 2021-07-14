@@ -1,9 +1,15 @@
 from flask import Flask
 from secrets import secret_key
-import os
+from flask_graphql import GraphQLView
+
+from routes import schema
+
+view_func = GraphQLView.as_view(
+    'graphql', schema=schema, graphiql=True)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key  # secret key in private file
+app.add_url_rule('/graphql', view_func=view_func)
 
 from routes import main
 
