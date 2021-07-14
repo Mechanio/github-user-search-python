@@ -1,11 +1,10 @@
 from flask import Flask
 from secrets import secret_key
 from flask_graphql import GraphQLView
+from schema import schema
 
-from routes import schema
-
-view_func = GraphQLView.as_view(
-    'graphql', schema=schema, graphiql=True)
+# GraphiQL interface initialization
+view_func = GraphQLView.as_view('graphql', schema=schema, graphiql=True)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key  # secret key in private file
