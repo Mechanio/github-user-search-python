@@ -40,6 +40,8 @@ class Query(graphene.ObjectType):
         new_response = requests.get(url)
         user_repos = json.loads(new_response.text)
         results = []
+        if len(user_repos) == 0:
+            return results
         for i in range(len(user_repos)):
             temp = UserReposQuery(repoName=user_repos[i]['name'],
                                   repoHtmlUrl=user_repos[i]['html_url'])
