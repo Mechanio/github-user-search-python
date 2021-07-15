@@ -31,9 +31,7 @@ def home():
             user_data = user_data.data
             if user_data['userInfo'] is None:
                 flash('This user does not exist')
-                return render_template('home.html', title='GitHub Search',
-                                       searchform=searchform)
-            return render_template('home.html', title='GitHub Search',
-                                   searchform=searchform, user_info=user_data)
-    return render_template('home.html', title='GitHub Search',
-                           searchform=searchform)
+                return render_template('home.html', searchform=searchform)
+            return render_template('home.html', searchform=searchform,
+                                   user_info=user_data)
+    return render_template('home.html', searchform=searchform)

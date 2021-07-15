@@ -1,43 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    {% if title %}
-        <title>{{ title }}</title>
-    {% else %}
-        <title>Sample title</title>
-    {% endif %}
-</head>
-<body>
-    <h1>Github Search</h1>
-    <form method="POST">
-        {% if searchform %}
-        {{ searchform.csrf_token }}
-        <div>
-            {{ searchform.login(placeholder="Enter GitHub login") }}
-            <input type="submit" name='submit_button' value='Submit'>
-        </div>
-        {% endif %}
-    </form>
-    {% for message in get_flashed_messages() %}
-        <a>{{ message }}</a>
-    {% endfor %}
-    {% if user_info %}
-        <div>
-            <a href="{{ user_info['userInfo']['htmlUrl'] }}">{{ user_info['userInfo']['name'] }}</a>
-        </div>
-        <div>
-            <img src="{{ user_info['userInfo']['avatarUrl'] }}" width="169" height="169">
-        </div>
-        <div>
-            {% for element in user_info['userRepos'] %}
-                <div>
-                    <a href="{{ element['repoHtmlUrl'] }}" class="repo-style">{{ element['repoName'] }}</a>
-                </div>
-            {% endfor %}
-        </div>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-    {% endif %}
-</body>
-</html>
+{% block title %}
+GitHub Search
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        {% if get_flashed_messages() %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in get_flashed_messages() %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h1>Github Search</h1>
+        <form method="POST">
+            {% if searchform %}
+            {{ searchform.csrf_token }}
+            <div class="form-inline">
+                {{ searchform.login(class_="form-control",  placeholder="Enter GitHub login") }}
+                <input class="btn btn-primary" type="submit" name='submit_button' value='Submit'>
+            </div>
+            {% endif %}
+        </form>
+        {% if user_info %}
+            <div class="">
+                <a class="h4" href="{{ user_info['userInfo']['htmlUrl'] }}">{{ user_info['userInfo']['name'] }}</a>
+            </div>
+            <div>
+                <img src="{{ user_info['userInfo']['avatarUrl'] }}" width="169" height="169">
+            </div>
+            <div>
+                {% for element in user_info['userRepos'] %}
+                    <div>
+                        <a class="h5" href="{{ element['repoHtmlUrl'] }}" class="repo-style">{{ element['repoName'] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
