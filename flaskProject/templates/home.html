@@ -20,6 +20,9 @@
         </div>
         {% endif %}
     </form>
+    {% for message in get_flashed_messages() %}
+        <a>{{ message }}</a>
+    {% endfor %}
     {% if user_info %}
         <div>
             <a href="{{ user_info['userInfo']['htmlUrl'] }}">{{ user_info['userInfo']['name'] }}</a>

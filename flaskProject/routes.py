@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 from forms import SearchForm
 from schema import schema
 
@@ -25,6 +25,10 @@ def home():
                                 }''' % (login, login)
             user_data = schema.execute(query_user_info)
             user_data = user_data.data
+            if user_data['userInfo'] is None:
+                flash('This user does not exist')
+                return render_template('home.html', title='GitHub Search',
+                                       searchform=searchform)
             return render_template('home.html', title='GitHub Search',
                                    searchform=searchform, user_info=user_data)
     return render_template('home.html', title='GitHub Search',
