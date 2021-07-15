@@ -7,6 +7,10 @@ main = Blueprint('main', __name__)
 
 @main.route('/', methods=['GET', 'POST'])
 def home():
+    """
+    Main view method of searching GitHub info via GitHub login
+    :return: result of search or message about problem
+    """
     searchform = SearchForm()
     if request.method == 'POST':
         if request.form['submit_button'] == 'Submit':

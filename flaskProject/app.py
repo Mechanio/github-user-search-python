@@ -1,5 +1,5 @@
-from flask import Flask
 from secrets import secret_key
+from flask import Flask
 from flask_graphql import GraphQLView
 from schema import schema
 

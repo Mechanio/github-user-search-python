@@ -4,6 +4,9 @@ import graphene
 
 
 class UserInfoQuery(graphene.ObjectType):
+    """
+    GitHub user info for schema
+    """
     url = graphene.String()
     name = graphene.String()
     avatarUrl = graphene.String()
@@ -11,11 +14,17 @@ class UserInfoQuery(graphene.ObjectType):
 
 
 class UserReposQuery(graphene.ObjectType):
+    """
+    GitHub user repositories for schema
+    """
     repoName = graphene.String()
     repoHtmlUrl = graphene.String()
 
 
 class Query(graphene.ObjectType):
+    """
+    Query for schema
+    """
     userInfo = graphene.Field(UserInfoQuery, url=graphene.String())
     userRepos = graphene.List(UserReposQuery, url=graphene.String())
 
